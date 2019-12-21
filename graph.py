@@ -1,4 +1,5 @@
 import numpy as np
+import string
 
 
 class Vertex:
@@ -16,12 +17,18 @@ class Edge:
 
 
 class Graph:
-    def __init__(self, vertex_numb, vertexes, file=None):
+    def __init__(self, vertex_numb, file=None, vertexes=None):
+        if vertexes is None:
+            vertexes = []
         self.vertex_numb = vertex_numb
         self.vertexes = vertexes
         self.edges = []
         self.matrix = []
         self.edges_numb = 0
+        if not vertexes:
+            for i in range(vertex_numb):
+                self.vertexes.append(Vertex(string.ascii_uppercase[i], i))
+
         if file:
             self.__read_adj_matrix(file)
             self.__get_edges()
@@ -164,7 +171,7 @@ class Graph:
         return min_way
 
     def prim(self):
-        spanning_tree = Graph(self.vertex_numb, self.vertexes)
+        spanning_tree = Graph(self.vertex_numb, vertexes=self.vertexes)
         raw_vertexes = self.vertexes.copy()
 
         proc_vertexes = [self.vertexes[0]]
@@ -189,9 +196,8 @@ class Graph:
 
         return spanning_tree
 
-    
-grp = Graph(8, [Vertex('a', 0), Vertex('b', 1), Vertex('c', 2), Vertex('d', 3), Vertex('e', 4), Vertex('f', 5),
-                Vertex('g', 6), Vertex('h', 7)], 'input.txt')
+
+grp = Graph(8, 'input.txt')
 
 grp.show_matrix()
 
